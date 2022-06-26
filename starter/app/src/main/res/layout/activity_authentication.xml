@@ -20,6 +20,7 @@
 
     <Button
         android:id="@+id/login_button"
+        style="@style/default_buttons_style"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
