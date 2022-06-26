@@ -48,7 +48,7 @@ class SaveReminderViewModel(val app: Application, private val dataSource: Remind
     /**
      * Save the reminder to the data source
      */
-    private fun saveReminder(reminderData: ReminderDataItem) {
+    fun saveReminder(reminderData: ReminderDataItem) {
         showLoading.value = true
         viewModelScope.launch {
             dataSource.saveReminder(
@@ -67,10 +67,18 @@ class SaveReminderViewModel(val app: Application, private val dataSource: Remind
         }
     }
 
+    fun selectLocation(latitude: Double, longitude: Double, title: String) {
+        this.latitude.value = latitude
+        this.longitude.value = longitude
+        reminderSelectedLocationStr.value = title
+
+        navigationCommand.value = NavigationCommand.Back
+    }
+
     /**
      * Validate the entered data and show error to the user if there's any invalid data
      */
-    private fun validateEnteredData(reminderData: ReminderDataItem): Boolean {
+    fun validateEnteredData(reminderData: ReminderDataItem): Boolean {
         if (reminderData.title.isNullOrEmpty()) {
             showSnackBarInt.value = R.string.err_enter_title
             return false

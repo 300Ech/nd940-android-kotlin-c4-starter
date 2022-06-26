@@ -9,6 +9,7 @@ import com.udacity.project4.R
 import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.base.NavigationCommand
 import com.udacity.project4.databinding.FragmentSaveReminderBinding
+import com.udacity.project4.locationreminders.RemindersActivity
 import com.udacity.project4.locationreminders.reminderslist.ReminderDataItem
 import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
 import org.koin.android.ext.android.inject
@@ -22,8 +23,7 @@ class SaveReminderFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_save_reminder, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_save_reminder, container, false)
 
         setDisplayHomeAsUpEnabled(true)
 
@@ -39,6 +39,10 @@ class SaveReminderFragment : BaseFragment() {
             //            Navigate to another fragment to get the user location
             _viewModel.navigationCommand.value =
                 NavigationCommand.To(SaveReminderFragmentDirections.actionSaveReminderFragmentToSelectLocationFragment())
+        }
+
+        _viewModel.locationPermissionGranted.observe(viewLifecycleOwner) { isGranted ->
+            binding.saveReminder.visibility = if (isGranted) View.VISIBLE else View.GONE
         }
 
         binding.saveReminder.setOnClickListener { saveReminder() }
@@ -67,6 +71,10 @@ class SaveReminderFragment : BaseFragment() {
             latitude = latitude,
             longitude = longitude
         )
-        _viewModel.validateAndSaveReminder(reminderDataItem)
+
+        if(_viewModel.validateEnteredData(reminderDataItem)) {
+            addGeofence(reminderDataItem)
+            _viewModel.saveReminder(reminderDataItem)
+        }
     }
 }

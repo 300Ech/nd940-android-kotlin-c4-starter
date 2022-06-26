@@ -46,6 +46,10 @@ class ReminderListFragment : BaseFragment() {
         binding.addReminderFAB.setOnClickListener {
             navigateToAddReminder()
         }
+
+        _viewModel.locationPermissionGranted.observe(viewLifecycleOwner) {
+            binding.addReminderFAB.visibility = if (it) View.VISIBLE else View.GONE
+        }
     }
 
     override fun onResume() {

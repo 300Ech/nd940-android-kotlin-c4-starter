@@ -16,6 +16,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.udacity.project4.R
 import com.udacity.project4.base.BaseFragment
+import com.udacity.project4.base.NavigationCommand
 import com.udacity.project4.databinding.FragmentSelectLocationBinding
 import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
 import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
@@ -144,11 +145,8 @@ class SelectLocationFragment : BaseFragment() {
         //         send back the selected location details to the view model
         //         and navigate back to the previous fragment to save the reminder and add the geofence
         selectedPositionMarker?.let {
-            _viewModel.latitude.value = it.position.latitude
-            _viewModel.longitude.value = it.position.longitude
-            _viewModel.reminderSelectedLocationStr.value = it.title
+            _viewModel.selectLocation(it.position.latitude, it.position.longitude, it.title ?: "")
         }
-        findNavController().navigate(R.id.action_selectLocationFragment_to_saveReminderFragment)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
