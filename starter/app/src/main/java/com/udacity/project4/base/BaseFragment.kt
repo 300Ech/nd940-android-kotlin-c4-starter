@@ -1,36 +1,11 @@
 package com.udacity.project4.base
 
-import android.Manifest
-import android.annotation.TargetApi
-import android.app.PendingIntent
-import android.content.Intent
-import android.content.IntentSender
-import android.content.pm.PackageManager
-import android.net.Uri
-import android.os.Build
-import android.os.Bundle
-import android.provider.Settings
-import android.util.Log
 import android.widget.Toast
-import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
-import com.google.android.gms.common.api.ResolvableApiException
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationSettingsRequest
-import com.google.android.gms.location.Geofence
-import com.google.android.gms.location.GeofencingClient
-import com.google.android.gms.location.GeofencingRequest
 import com.google.android.material.snackbar.Snackbar
-import com.udacity.project4.BuildConfig
-import com.udacity.project4.R
-
-import com.udacity.project4.locationreminders.geofence.GeofenceBroadcastReceiver
-import com.udacity.project4.locationreminders.geofence.GeofenceBroadcastReceiver.Companion.ACTION_GEOFENCE_EVENT
-import com.udacity.project4.locationreminders.reminderslist.ReminderDataItem
 
 /**
  * Base Fragment to observe on the common LiveData objects
@@ -41,7 +16,7 @@ abstract class BaseFragment : Fragment() {
      */
     abstract val _viewModel: BaseViewModel
 
-    private lateinit var geofencingClient: GeofencingClient
+    /*private lateinit var geofencingClient: GeofencingClient
 
     private val runningQOrLater = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
 
@@ -56,13 +31,13 @@ abstract class BaseFragment : Fragment() {
         } else {
             PendingIntent.getBroadcast(requireContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         }
-    }
+    }*/
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    /*override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         geofencingClient = LocationServices.getGeofencingClient(requireActivity())
-    }
+    }*/
 
     override fun onStart() {
         super.onStart()
@@ -93,7 +68,7 @@ abstract class BaseFragment : Fragment() {
             }
         })
 
-        checkPermissionsAndStartGeofencing()
+        //checkPermissionsAndStartGeofencing()
     }
 
     /*
@@ -101,19 +76,19 @@ abstract class BaseFragment : Fragment() {
      *  checkDeviceLocationSettingsAndStartGeofence again to make sure it's actually on, but
      *  we don't resolve the check to keep the user from seeing an endless loop.
      */
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    /*override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_TURN_DEVICE_LOCATION_ON) {
             // We don't rely on the result code, but just check the location setting again
             checkDeviceLocationSettingsAndStartGeofence(false)
         }
-    }
+    }*/
 
     /*
      * In all cases, we need to have the location permission.  On Android 10+ (Q) we need to have
      * the background permission as well.
      */
-    override fun onRequestPermissionsResult(
+    /*override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
         grantResults: IntArray
@@ -138,12 +113,12 @@ abstract class BaseFragment : Fragment() {
         } else {
             checkDeviceLocationSettingsAndStartGeofence()
         }
-    }
+    }*/
 
     /**
      * Starts the permission check and Geofence process.
      */
-    private fun checkPermissionsAndStartGeofencing() {
+    /*private fun checkPermissionsAndStartGeofencing() {
         //if (viewModel.geofenceIsActive()) return
         if (foregroundAndBackgroundLocationPermissionApproved()) {
             _viewModel.locationPermissionGranted.value = true
@@ -151,13 +126,13 @@ abstract class BaseFragment : Fragment() {
         } else {
             requestForegroundAndBackgroundLocationPermissions()
         }
-    }
+    }*/
 
     /*
      *  Determines whether the app has the appropriate permissions across Android 10+ and all other
      *  Android versions.
      */
-    @TargetApi(29)
+    /*@TargetApi(29)
     private fun foregroundAndBackgroundLocationPermissionApproved(): Boolean {
         val foregroundLocationApproved = (
                 PackageManager.PERMISSION_GRANTED ==
@@ -168,12 +143,12 @@ abstract class BaseFragment : Fragment() {
                         checkSelfPermission(requireContext(), Manifest.permission.ACCESS_BACKGROUND_LOCATION)
             } else true
         return foregroundLocationApproved && backgroundPermissionApproved
-    }
+    }*/
 
     /*
      *  Requests ACCESS_FINE_LOCATION and (on Android 10+ (Q) ACCESS_BACKGROUND_LOCATION.
      */
-    @TargetApi(29 )
+    /*@TargetApi(29 )
     private fun requestForegroundAndBackgroundLocationPermissions() {
         if (foregroundAndBackgroundLocationPermissionApproved()) {
             _viewModel.locationPermissionGranted.value = true
@@ -195,13 +170,13 @@ abstract class BaseFragment : Fragment() {
         }
 
         requestPermissions(permissionsArray, resultCode)
-    }
+    }*/
 
     /*
      *  Uses the Location Client to check the current state of location settings, and gives the user
      *  the opportunity to turn on location services within our app.
      */
-    private fun checkDeviceLocationSettingsAndStartGeofence(resolve:Boolean = true) {
+    /*private fun checkDeviceLocationSettingsAndStartGeofence(resolve:Boolean = true) {
         val locationRequest = LocationRequest.create().apply {
             priority = LocationRequest.PRIORITY_LOW_POWER
         }
@@ -232,12 +207,12 @@ abstract class BaseFragment : Fragment() {
                 }.show()
             }
         }
-    }
+    }*/
 
     /*
      * Adds a Geofence for the current record if needed.
      */
-    fun addGeofence(reminderDataItem: ReminderDataItem) {
+    /*fun addGeofence(reminderDataItem: ReminderDataItem) {
         if (_viewModel.locationPermissionGranted.value == false) return
 
         val geofence = Geofence.Builder()
@@ -259,9 +234,9 @@ abstract class BaseFragment : Fragment() {
         geofencingClient.addGeofences(geofencingRequest, geofencePendingIntent)
             .addOnSuccessListener { Log.v(TAG, "Geofence added") }
             .addOnFailureListener { Log.v(TAG, "Could not add geofence") }
-    }
+    }*/
 
-    companion object {
+    /*companion object {
         private const val TAG = "BaseFragment"
         private const val REQUEST_FOREGROUND_AND_BACKGROUND_PERMISSION_RESULT_CODE = 33
         private const val REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE = 34
@@ -269,5 +244,5 @@ abstract class BaseFragment : Fragment() {
         private const val BACKGROUND_LOCATION_PERMISSION_INDEX = 1
         private const val GEOFENCE_RADIUS_IN_METERS = 100f
         const val REQUEST_TURN_DEVICE_LOCATION_ON = 29
-    }
+    }*/
 }
