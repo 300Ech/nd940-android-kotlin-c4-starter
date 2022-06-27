@@ -86,9 +86,9 @@ dependencies {
 
     //Koin
     // Koin for Kotlin
-    implementation "io.insert-koin:koin-core:$koinVersion"
+    implementation "io.insert-koin:koin-core:2.0.1"
     // Koin AndroidX ViewModel features
-    implementation "io.insert-koin:koin-androidx-viewmodel:$koinVersion"
+    implementation "io.insert-koin:koin-androidx-viewmodel:2.0.1"
 
     //implementation "org.koin:koin-core:2.0.1"
     //implementation "org.koin:koin-androidx-viewmodel:2.0.1"
@@ -130,6 +130,8 @@ dependencies {
     androidTestImplementation "org.mockito:mockito-core:$mockitoVersion"
     androidTestImplementation "com.linkedin.dexmaker:dexmaker-mockito:2.16.0"
     androidTestImplementation('org.koin:koin-test:2.0.1') { exclude group: 'org.mockito' }
+
+    androidTestImplementation('androidx.test:runner:1.4.0')
 
     // required to avoid crash on Android 12 API 31
     implementation 'androidx.work:work-runtime-ktx:2.7.1'

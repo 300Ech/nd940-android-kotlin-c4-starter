@@ -2,23 +2,33 @@ package com.udacity.project4
 
 import android.app.Application
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
+import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import com.udacity.project4.locationreminders.RemindersActivity
 import com.udacity.project4.locationreminders.data.ReminderDataSource
 import com.udacity.project4.locationreminders.data.local.LocalDB
 import com.udacity.project4.locationreminders.data.local.RemindersLocalRepository
 import com.udacity.project4.locationreminders.reminderslist.RemindersListViewModel
 import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
 import com.udacity.project4.util.DataBindingIdlingResource
+import com.udacity.project4.util.monitorActivity
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.android.ext.koin.androidLogger
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
-import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.test.AutoCloseKoinTest
 import org.koin.test.get
 
@@ -39,7 +49,7 @@ class RemindersActivityTest : AutoCloseKoinTest() {// Extended Koin Test - embed
      */
     @Before
     fun init() {
-        //stopKoin()//stop the original app koin
+        stopKoin()//stop the original app koin
         appContext = getApplicationContext()
         val myModule = module {
             viewModel {
@@ -57,10 +67,13 @@ class RemindersActivityTest : AutoCloseKoinTest() {// Extended Koin Test - embed
             single { RemindersLocalRepository(get()) as ReminderDataSource }
             single { LocalDB.createRemindersDao(appContext) }
         }
+
         //declare a new koin module
         startKoin {
+            androidLogger()
             modules(listOf(myModule))
         }
+
         //Get our real repository
         repository = get()
 
@@ -85,5 +98,23 @@ class RemindersActivityTest : AutoCloseKoinTest() {// Extended Koin Test - embed
     @After
     fun unregisterIdlingResource() {
         IdlingRegistry.getInstance().unregister(dataBindingIdlingResource)
+    }
+
+    @get:Rule
+    val activityRule = ActivityScenarioRule(RemindersActivity::class.java)
+
+    @Test fun testSaveInvalidReminderErrorMessage() {
+        dataBindingIdlingResource.monitorActivity(activityRule.scenario)
+
+        // FAB button click
+        onView(withId(R.id.addReminderFAB)).perform(click())
+
+        // Save button click
+        onView(withId(R.id.saveReminder)).perform(click())
+
+        val errorMessage = appContext.getString(R.string.err_enter_title)
+        onView(withText(errorMessage)).check(matches(isDisplayed()))
+
+        activityRule.scenario.close()
     }
 }
