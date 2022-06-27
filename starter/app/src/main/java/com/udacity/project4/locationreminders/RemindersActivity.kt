@@ -44,20 +44,4 @@ class RemindersActivity : AppCompatActivity() {
         startActivity(loginIntent)
         finish()
     }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    }
-
-    companion object {
-        const val TAG = "HuntMainActivity"
-    }
 }
