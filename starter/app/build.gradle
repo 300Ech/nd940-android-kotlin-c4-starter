@@ -128,7 +128,7 @@ dependencies {
     implementation "androidx.test:core:$androidXTestCoreVersion"
     implementation "androidx.fragment:fragment:$fragmentVersion"
     androidTestImplementation "org.mockito:mockito-core:$mockitoVersion"
-    androidTestImplementation "com.linkedin.dexmaker:dexmaker-mockito:$dexMakerVersion"
+    androidTestImplementation "com.linkedin.dexmaker:dexmaker-mockito:2.16.0"
     androidTestImplementation('org.koin:koin-test:2.0.1') { exclude group: 'org.mockito' }
 
     // required to avoid crash on Android 12 API 31

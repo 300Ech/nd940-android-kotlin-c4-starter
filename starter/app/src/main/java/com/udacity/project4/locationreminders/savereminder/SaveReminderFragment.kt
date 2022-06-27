@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.observe
 import com.udacity.project4.R
 import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.base.NavigationCommand
@@ -61,7 +62,7 @@ class SaveReminderFragment : BaseFragment() {
         val latitude = _viewModel.latitude.value
         val longitude = _viewModel.longitude.value
 
-        // TODO: use the user entered reminder details to:
+        // use the user entered reminder details to:
         //  1) add a geofencing request
         //  2) save the reminder to the local db
         val reminderDataItem = ReminderDataItem(

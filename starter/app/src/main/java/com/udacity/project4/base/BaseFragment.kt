@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.LocationServices
@@ -49,7 +50,7 @@ abstract class BaseFragment : Fragment() {
         intent.action = ACTION_GEOFENCE_EVENT
         // Use FLAG_UPDATE_CURRENT so that you get the same pending intent back when calling
         // addGeofences() and removeGeofences().
-        PendingIntent.getBroadcast(requireContext(), 0, intent, PendingIntent.FLAG_MUTABLE)
+        PendingIntent.getBroadcast(requireContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

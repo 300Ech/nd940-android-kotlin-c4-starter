@@ -13,6 +13,7 @@ import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*

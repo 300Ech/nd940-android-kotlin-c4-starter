@@ -42,18 +42,17 @@ class SelectLocationFragment : BaseFragment() {
         setHasOptionsMenu(true)
         setDisplayHomeAsUpEnabled(true)
 
-        // TODO: add the map setup implementation
         val mapFragment = childFragmentManager.findFragmentById(R.id.google_map) as SupportMapFragment
         mapFragment.getMapAsync { googleMap ->
             map = googleMap
 
-            // TODO: zoom to the user location after taking his permission
+            // zoom to the user location after taking his permission
             enableMyLocation()
 
-            // TODO: add style to the map
+            // add style to the map
             setMapStyle(map)
 
-            // TODO: put a marker to location that the user selected
+            // put a marker to location that the user selected
             map.setOnMapLongClickListener { latLng ->
                 addMarker(latLng)
             }
@@ -64,7 +63,7 @@ class SelectLocationFragment : BaseFragment() {
         }
 
         binding.selectLocationButton.setOnClickListener {
-            // TODO: call this function after the user confirms on the selected location
+            // call this function after the user confirms on the selected location
             onLocationSelected()
         }
 
@@ -141,9 +140,9 @@ class SelectLocationFragment : BaseFragment() {
     }
 
     private fun onLocationSelected() {
-        //        TODO: When the user confirms on the selected location,
-        //         send back the selected location details to the view model
-        //         and navigate back to the previous fragment to save the reminder and add the geofence
+        // When the user confirms on the selected location,
+        // send back the selected location details to the view model
+        // and navigate back to the previous fragment to save the reminder and add the geofence
         selectedPositionMarker?.let {
             _viewModel.selectLocation(it.position.latitude, it.position.longitude, it.title ?: "")
         }
