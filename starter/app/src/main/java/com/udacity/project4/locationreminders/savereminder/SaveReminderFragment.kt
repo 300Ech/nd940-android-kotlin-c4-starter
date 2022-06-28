@@ -141,7 +141,6 @@ class SaveReminderFragment : BaseFragment() {
             settingsClient.checkLocationSettings(builder.build())
 
         locationSettingsResponseTask.addOnFailureListener { exception ->
-            _viewModel.locationPermissionGranted.value = false
             if (exception is ResolvableApiException && resolve) {
                 // Location settings are not satisfied, but this can be fixed
                 // by showing the user a dialog.
@@ -170,6 +169,14 @@ class SaveReminderFragment : BaseFragment() {
         }
 
         locationSettingsResponseTask.addOnCompleteListener { startGeoFence() }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == REQUEST_TURN_DEVICE_LOCATION_ON) {
+            checkDeviceLocationSettingsAndStartGeofence(false)
+        }
     }
 
     /*
@@ -226,6 +233,6 @@ class SaveReminderFragment : BaseFragment() {
         const val REQUEST_TURN_DEVICE_LOCATION_ON = 29
         private const val REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE = 34
         private const val REQUEST_FOREGROUND_AND_BACKGROUND_PERMISSION_RESULT_CODE = 33
-        private const val GEOFENCE_RADIUS_IN_METERS = 100f
+        private const val GEOFENCE_RADIUS_IN_METERS = 10f
     }
 }

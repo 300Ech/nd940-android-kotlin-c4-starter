@@ -44,13 +44,7 @@ class ReminderListFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = this
         setupRecyclerView()
-        binding.addReminderFAB.setOnClickListener {
-            navigateToAddReminder()
-        }
-
-        _viewModel.locationPermissionGranted.observe(viewLifecycleOwner) {
-            binding.addReminderFAB.visibility = if (it) View.VISIBLE else View.GONE
-        }
+        binding.addReminderFAB.setOnClickListener { navigateToAddReminder() }
     }
 
     override fun onResume() {
