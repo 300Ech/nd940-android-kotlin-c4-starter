@@ -1,13 +1,15 @@
 package com.udacity.project4
 
+import android.app.Activity
 import android.app.Application
+import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
-import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.RootMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.udacity.project4.locationreminders.RemindersActivity
@@ -19,9 +21,9 @@ import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
 import com.udacity.project4.util.DataBindingIdlingResource
 import com.udacity.project4.util.monitorActivity
 import kotlinx.coroutines.runBlocking
+import org.hamcrest.CoreMatchers
 import org.junit.After
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.android.ext.koin.androidLogger
@@ -100,11 +102,12 @@ class RemindersActivityTest : AutoCloseKoinTest() {// Extended Koin Test - embed
         IdlingRegistry.getInstance().unregister(dataBindingIdlingResource)
     }
 
-    @get:Rule
-    val activityRule = ActivityScenarioRule(RemindersActivity::class.java)
+    /*@get:Rule
+    val activityRule = ActivityScenarioRule(RemindersActivity::class.java)*/
 
     @Test fun testSaveInvalidReminderErrorMessage() {
-        dataBindingIdlingResource.monitorActivity(activityRule.scenario)
+        val activityScenario = ActivityScenario.launch(RemindersActivity::class.java)
+        dataBindingIdlingResource.monitorActivity(activityScenario)
 
         // FAB button click
         onView(withId(R.id.addReminderFAB)).perform(click())
@@ -115,6 +118,47 @@ class RemindersActivityTest : AutoCloseKoinTest() {// Extended Koin Test - embed
         val errorMessage = appContext.getString(R.string.err_enter_title)
         onView(withText(errorMessage)).check(matches(isDisplayed()))
 
-        activityRule.scenario.close()
+        activityScenario.close()
+    }
+
+    @Test fun testReminderSavedToastMessage() {
+        val activityScenario = ActivityScenario.launch(RemindersActivity::class.java)
+        dataBindingIdlingResource.monitorActivity(activityScenario)
+
+        // FAB button click
+        onView(withId(R.id.addReminderFAB)).perform(click())
+
+        // adds a title
+        onView(withId(R.id.reminderTitle)).perform(typeText("Test Title"))
+        onView(withId(R.id.reminderTitle)).perform(closeSoftKeyboard())
+
+        // add location
+        onView(withText(R.string.reminder_location)).perform(click())
+
+        // selects the location
+        onView(withId(R.id.selectLocationButton)).perform(click())
+        onView(withId(R.id.container)).perform(longClick())
+        onView(withId(R.id.selectLocationButton)).perform(click())
+
+        // Save button click
+        onView(withId(R.id.saveReminder)).perform(click())
+
+        onView(withText(R.string.reminder_saved)).inRoot(
+            RootMatchers.withDecorView(
+                CoreMatchers.not(
+                    CoreMatchers.`is`(getActivity(activityScenario).window.decorView)
+                )
+            )
+        ).check(matches(isDisplayed()))
+
+        activityScenario.close()
+    }
+
+    private fun getActivity(activityScenario: ActivityScenario<RemindersActivity>): Activity {
+        lateinit var activity: Activity
+        activityScenario.onActivity {
+            activity = it
+        }
+        return activity
     }
 }
