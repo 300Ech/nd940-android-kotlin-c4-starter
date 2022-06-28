@@ -102,9 +102,6 @@ class RemindersActivityTest : AutoCloseKoinTest() {// Extended Koin Test - embed
         IdlingRegistry.getInstance().unregister(dataBindingIdlingResource)
     }
 
-    /*@get:Rule
-    val activityRule = ActivityScenarioRule(RemindersActivity::class.java)*/
-
     @Test fun testSaveInvalidReminderErrorMessage() {
         val activityScenario = ActivityScenario.launch(RemindersActivity::class.java)
         dataBindingIdlingResource.monitorActivity(activityScenario)
