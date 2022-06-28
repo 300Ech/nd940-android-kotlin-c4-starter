@@ -75,9 +75,13 @@ class RemindersLocalRepositoryTest {
     }
 
     @Test
-    fun insertReminderFailed() = runBlockingTest {
+    fun insertReminderFailed() = runBlocking {
         // GIVEN - Get a non existing reminder.
-        val result = remindersRepository.getReminder("A") as Result.Error
-        assertThat(result, instanceOf(Result.Error::class.java))
+        val result = remindersRepository.getReminder("A")
+
+        val error =  (result is Result.Error)
+        val message = (result as Result.Error).message
+        assertThat(error, `is`(true))
+        assertThat(message, `is`("Reminder not found!"))
     }
 }
